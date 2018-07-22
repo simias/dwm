@@ -74,6 +74,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_Left,   setmfact,       {.f = -0.01} },
 	{ MODKEY,                       XK_Right,  setmfact,       {.f = +0.01} },
+	{ MODKEY,                       XK_Up,     spawn,          SHCMD("set-brightness.sh +200") },
+	{ MODKEY,                       XK_Down,   spawn,          SHCMD("set-brightness.sh -200") },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_space,  view,           {0} },
 	{ MODKEY|ShiftMask,             XK_k,      killclient,     {0} },
