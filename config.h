@@ -30,7 +30,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Firefox",  NULL,       NULL,       1 << 7,       0,           -1 },
-	{ NULL,       "mainterm", NULL,       1 << 6,       0,           -1 },
+	{ "mainterm", NULL,       NULL,       1 << 6,       0,           -1 },
 	{ "Emacs",    NULL,       NULL,       1 << 5,       0,           -1 },
 };
 
@@ -60,7 +60,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "urxvtc", NULL };
+static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -76,6 +76,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Right,  setmfact,       {.f = +0.01} },
 	{ MODKEY,                       XK_Up,     spawn,          SHCMD("set-brightness.sh +200") },
 	{ MODKEY,                       XK_Down,   spawn,          SHCMD("set-brightness.sh -200") },
+	{ MODKEY,                       XK_l,      spawn,          SHCMD("xautolock -locknow") },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_space,  view,           {0} },
 	{ MODKEY|ShiftMask,             XK_k,      killclient,     {0} },
@@ -116,5 +117,5 @@ static Button buttons[] = {
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },}
-;
+	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+};
