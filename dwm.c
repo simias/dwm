@@ -735,9 +735,9 @@ drawbar(Monitor *m)
 
 		if (has_sticky) {
 			drw_setscheme(drw, scheme[SchemeSticky]);
-			drw_rect(drw, x + boxs + boxw, boxs, boxw, boxw,
-				1,
-				urg & 1 << i);
+			drw_rect(drw, x + boxs, boxs + boxw + 1, boxw, boxw,
+				 m->sel && m->sel->issticky,
+				 urg & 1 << i);
 		}
 		x += w;
 	}
@@ -747,7 +747,8 @@ drawbar(Monitor *m)
 
 	if ((w = m->ww - sw - x) > bh) {
 		if (m->sel) {
-			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+			int selscheme = m->sel->issticky ? SchemeSticky : SchemeSel;
+			drw_setscheme(drw, scheme[m == selmon ? selscheme : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
