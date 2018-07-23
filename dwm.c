@@ -168,6 +168,7 @@ static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
+static void focusmonabs(const Arg *arg);
 static void focusstack(const Arg *arg);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
@@ -809,6 +810,33 @@ focusmon(const Arg *arg)
 		return;
 	if ((m = dirtomon(arg->i)) == selmon)
 		return;
+	unfocus(selmon->sel, 0);
+	selmon = m;
+	focus(NULL);
+}
+
+void
+focusmonabs(const Arg *arg)
+{
+	Monitor *m;
+	unsigned int i;
+
+	if (!mons->next)
+		return;
+	m = mons;
+
+	for (i = 0; i < arg->ui; i++) {
+	  if (!m) {
+	    break;
+	  }
+
+	  m = m->next;
+	}
+
+	if (!m) {
+	  return;
+	}
+
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
