@@ -5,8 +5,11 @@ include config.mk
 
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
+DEP = ${SRC:.c=.d}
 
 all: options dwm
+
+-include $(DEP)
 
 options:
 	@echo dwm build options:
@@ -15,9 +18,9 @@ options:
 	@echo "CC       = ${CC}"
 
 .c.o:
-	${CC} -c ${CFLAGS} $<
+	${CC} -c ${CFLAGS} -MMD -MP $<
 
-${OBJ}: config-changeme.h config.mk
+${OBJ}: config.mk
 
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
