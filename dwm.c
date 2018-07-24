@@ -849,10 +849,19 @@ focus(Client *c)
 void
 focusbyclass(const Arg *arg) {
 	Client *c = NULL;
+	Client *sel = NULL;
+
+	if (selmon) {
+		sel = selmon->sel;
+	}
 
 	c = findclientbyclass(arg->s);
-	if (c == NULL) {
-		/* Not found */
+	/* If the current focused window matches attempt to find an other one */
+	if (c && c == sel) {
+		c = findclientbyclass(arg->s);
+	}
+
+	if (c == NULL || c == sel) {
 		return;
 	}
 
@@ -1099,8 +1108,13 @@ keypress(XEvent *e)
 	for (i = 0; i < LENGTH(keys); i++)
 		if (keysym == keys[i].keysym
 		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
-		&& keys[i].func)
+		&& keys[i].func) {
+			if (keys[i].func != focusbyclass) {
+				/* Reset focusbyclass selection sequence */
+				lastclientfound = NULL;
+			}
 			keys[i].func(&(keys[i].arg));
+		}
 }
 
 void
