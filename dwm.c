@@ -94,6 +94,7 @@ struct Client {
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
 	int bw, oldbw;
 	unsigned int tags;
+	unsigned int locked_tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, issticky;
 	Client *next;
 	Client *snext;
@@ -215,6 +216,7 @@ static void tagmon(const Arg *arg);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
+static void toggletaglock(const Arg *arg);
 static void togglesticky(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
@@ -293,6 +295,7 @@ applyrules(Client *c)
 	/* rule matching */
 	c->isfloating = 0;
 	c->tags = 0;
+	c->locked_tags = 0;
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
@@ -307,6 +310,7 @@ applyrules(Client *c)
 		{
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
+			c->locked_tags |= r->tags;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -740,12 +744,18 @@ drawbar(Monitor *m)
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
 				urg & 1 << i);
 
-		if (has_sticky) {
-			drw_setscheme(drw, scheme[SchemeSticky]);
+		if (m->sel && m->sel->locked_tags & 1 << i) {
 			drw_rect(drw, x + boxs, boxs + boxw + 1, boxw, boxw,
-				 m->sel && m->sel->issticky,
+				 m == selmon,
 				 urg & 1 << i);
 		}
+
+		if (has_sticky) {
+			drw_rect(drw, x + boxs, boxs + (boxw + 1) * 2, boxw, boxw,
+				 m == selmon && m->sel && m->sel->issticky,
+				 urg & 1 << i);
+		}
+
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
@@ -1543,6 +1553,7 @@ sendmon(Client *c, Monitor *m)
 	detachstack(c);
 	c->mon = m;
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
+	c->tags |= c->locked_tags;
 	attach(c);
 	attachstack(c);
 	focus(NULL);
@@ -1781,8 +1792,11 @@ spawn(const Arg *arg)
 void
 tag(const Arg *arg)
 {
-	if (selmon->sel && arg->ui & TAGMASK) {
-		selmon->sel->tags = arg->ui & TAGMASK;
+	Client *sel = selmon->sel;
+
+	if (sel && arg->ui & TAGMASK) {
+		sel->tags = arg->ui & TAGMASK;
+		sel->tags |= sel->locked_tags;
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -1846,6 +1860,26 @@ togglefloating(const Arg *arg)
 }
 
 void
+toggletaglock(const Arg *arg)
+{
+	Client *sel;
+
+	if (!selmon || !selmon->sel) {
+		return;
+	}
+
+	sel = selmon->sel;
+
+	if (sel->locked_tags) {
+		sel->locked_tags = 0;
+	} else {
+		sel->locked_tags = sel->tags;
+	}
+
+	drawbars();
+}
+
+void
 togglesticky(const Arg *arg)
 {
 	if (!selmon->sel)
@@ -1863,7 +1897,7 @@ toggletag(const Arg *arg)
 		return;
 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
 	if (newtags) {
-		selmon->sel->tags = newtags;
+		selmon->sel->tags = newtags | selmon->sel->locked_tags;
 		focus(NULL);
 		arrange(selmon);
 	}
