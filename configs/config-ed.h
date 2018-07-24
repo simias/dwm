@@ -1,6 +1,3 @@
-/* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "s" };
-
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 
 static const Rule rules[] = {
