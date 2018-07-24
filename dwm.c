@@ -71,6 +71,7 @@ typedef union {
 	int i;
 	unsigned int ui;
 	float f;
+	const char *s;
 	const void *v;
 } Arg;
 
@@ -86,6 +87,7 @@ typedef struct Monitor Monitor;
 typedef struct Client Client;
 struct Client {
 	char name[256];
+	char *class;
 	float mina, maxa;
 	int x, y, w, h;
 	int oldx, oldy, oldw, oldh;
@@ -165,7 +167,9 @@ static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
 static void expose(XEvent *e);
+static Client *findclientbyclass(const char *class);
 static void focus(Client *c);
+static void focusbyclass(const Arg *arg);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusmonabs(const Arg *arg);
@@ -267,6 +271,7 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static Client *lastclientfound = NULL;
 
 /* configuration, allows nested code to access above variables */
 /* Create a symbolic link to one of the configs/config-* */
@@ -291,6 +296,8 @@ applyrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
+
+	c->class = strdup(class);
 
 	for (i = 0; i < LENGTH(rules); i++) {
 		r = &rules[i];
@@ -779,6 +786,41 @@ expose(XEvent *e)
 		drawbar(m);
 }
 
+Client *
+findclientbyclass(const char *class) {
+	Client *c;
+	Client *first_found = NULL;
+	Monitor *m;
+	int found_last_client = (lastclientfound == NULL);
+
+	/* Attempt to find a client whose class contains "class". If
+	   "lastclientfound" is not NULL and multiple matches are found returns
+	   the one following "lastclientfound" (to rotate between matches
+	   between each invocation) */
+	for (m = mons; m; m = m->next) {
+		for (c = m->clients; c; c = c->next) {
+			if (c->class && strstr(class, c->class)) {
+				if (found_last_client) {
+					lastclientfound = c;
+					return c;
+				}
+
+				if (c == lastclientfound) {
+					found_last_client = 1;
+				}
+
+				if (first_found == NULL) {
+					first_found = c;
+				}
+			}
+		}
+	}
+
+	lastclientfound = first_found;
+
+	return first_found;
+}
+
 void
 focus(Client *c)
 {
@@ -802,6 +844,43 @@ focus(Client *c)
 	}
 	selmon->sel = c;
 	drawbars();
+}
+
+void
+focusbyclass(const Arg *arg) {
+	Client *c = NULL;
+
+	c = findclientbyclass(arg->s);
+	if (c == NULL) {
+		/* Not found */
+		return;
+	}
+
+	if (c->mon != selmon) {
+		unfocus(selmon->sel, 0);
+		selmon = c->mon;
+	}
+
+	if (!ISVISIBLE(c) && c->tags) {
+		/* Find the first tag containing the client and switch to
+		   that */
+		unsigned int tag = c->tags & TAGMASK;
+		Arg a = { 0 };
+
+		tag = 1 << (ffs(tag) - 1);
+
+		a.ui = tag;
+		viewall(&a);
+	}
+
+	if (ISVISIBLE(c)) {
+		focus(c);
+		restack(c->mon);
+	} else {
+		/* Not sure if this can happen but let's handle all cases
+		   properly */
+		focus(NULL);
+	}
 }
 
 /* there are some broken focus acquiring clients needing extra handling */
@@ -1820,6 +1899,10 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+	if (c == lastclientfound) {
+		lastclientfound = NULL;
+	}
+	free(c->class);
 	free(c);
 	focus(NULL);
 	updateclientlist();

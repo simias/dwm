@@ -52,7 +52,7 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MODKEY,                       KEY,      viewall,        {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
@@ -81,7 +81,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Down,   spawn,          SHCMD("set-brightness.sh -200") },
 	{ MODKEY,                       XK_l,      spawn,          SHCMD("xautolock -locknow") },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_space,  view,           {0} },
+	{ MODKEY,                       XK_space,  viewall,        {0} },
 	{ MODKEY,                       XK_minus,  togglesticky,   {0} },
 	{ MODKEY|ShiftMask,             XK_k,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -93,6 +93,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_a,      focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_o,      focusmon,       {.i = +1 } },
+	{ MODKEY,                       XK_e,      focusbyclass,   {.s = "Emacs" } },
+	{ MODKEY,                       XK_w,      focusbyclass,   {.s = "Firefox" } },
+	{ MODKEY,                       XK_c,      focusbyclass,   {.s = "mainterm" } },
 	{ MODKEY|ShiftMask,             XK_a,      tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_o,      tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
@@ -100,10 +103,10 @@ static Key keys[] = {
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_e,                      5)
-	TAGKEYS(                        XK_c,                      6)
-	TAGKEYS(                        XK_w,                      7)
-	TAGKEYS(                        XK_s,                      8)
+	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
+	TAGKEYS(                        XK_8,                      7)
+	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
