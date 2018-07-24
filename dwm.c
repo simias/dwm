@@ -828,7 +828,7 @@ focusmon(const Arg *arg)
 	focus(NULL);
 }
 
-void
+inline void
 focusmonabs(const Arg *arg)
 {
 	Monitor *m;
@@ -2086,7 +2086,7 @@ view(const Arg *arg)
 	arrange(selmon);
 }
 
-void
+inline void
 viewall(const Arg *arg)
 {
 	Monitor *m;
