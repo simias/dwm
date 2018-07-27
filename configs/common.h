@@ -42,7 +42,7 @@ static const Layout layouts[] = {
 	{ MODKEY,                       KEY,      viewall,        {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -51,6 +51,12 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+
+#ifndef XK_XF86AudioLowerVolume
+# define XK_XF86AudioLowerVolume    0x1008ff11
+# define XK_XF86AudioMute           0x1008ff12
+# define XK_XF86AudioRaiseVolume    0x1008ff13
+#endif
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -87,15 +93,20 @@ static Key keys[] = {
 	{ MODKEY,                       XK_c,      focusbyclass,   {.s = "mainterm" } },
 	{ MODKEY|ShiftMask,             XK_a,      tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_o,      tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_s,                      8)
+	TAGKEYS(                        XK_1,                      0),
+	TAGKEYS(                        XK_2,                      1),
+	TAGKEYS(                        XK_3,                      2),
+	TAGKEYS(                        XK_4,                      3),
+	TAGKEYS(                        XK_5,                      4),
+	TAGKEYS(                        XK_6,                      5),
+	TAGKEYS(                        XK_7,                      6),
+	TAGKEYS(                        XK_8,                      7),
+	TAGKEYS(                        XK_s,                      8),
+
+	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB-")},
+	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB+")},
+	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master 1+ toggle")},
+
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
