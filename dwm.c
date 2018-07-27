@@ -876,11 +876,6 @@ focusbyclass(const Arg *arg) {
 		return;
 	}
 
-	if (c->mon != selmon) {
-		unfocus(selmon->sel, 0);
-		selmon = c->mon;
-	}
-
 	if (!ISVISIBLE(c) && c->tags) {
 		/* Find the first tag containing the client and switch to
 		   that */
@@ -2237,6 +2232,7 @@ inline void
 viewall(const Arg *arg)
 {
 	Monitor *m;
+	Monitor *sm = selmon;
 
 	for (m = mons; m; m = m->next) {
 		if ((arg->ui & TAGMASK) == m->tagset[m->seltags])
@@ -2244,13 +2240,14 @@ viewall(const Arg *arg)
 		m->seltags ^= 1; /* toggle sel tagset */
 		if (arg->ui & TAGMASK)
 			m->tagset[m->seltags] = arg->ui & TAGMASK;
-	}
 
-	focus(NULL);
-
-	for (m = mons; m; m = m->next) {
+		selmon = m;
+		focus(NULL);
 		arrange(m);
 	}
+
+	selmon = sm;
+	focus(NULL);
 }
 
 Client *
