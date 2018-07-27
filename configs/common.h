@@ -105,7 +105,7 @@ static Key keys[] = {
 
 	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB-")},
 	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB+")},
-	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master 1+ toggle")},
+	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master toggle")},
 
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
