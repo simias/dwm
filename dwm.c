@@ -472,7 +472,7 @@ buttonpress(XEvent *e)
 void
 banishpointer(const Arg *arg)
 {
-	XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->wx + selmon->ww, selmon->wy + selmon->wh);
+	XWarpPointer(dpy, None, root, 0, 0, 0, 0, sw, sh);
 }
 
 void
