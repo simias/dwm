@@ -58,6 +58,11 @@ static const char *termcmd[]  = { "st", NULL };
 # define XK_XF86AudioRaiseVolume    0x1008ff13
 #endif
 
+#ifndef XK_XF86MonBrightnessUp
+# define XK_XF86MonBrightnessUp     0x1008ff02
+# define XK_XF86MonBrightnessDown   0x1008ff03
+#endif
+
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
@@ -70,8 +75,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_Left,   setmfact,       {.f = -0.01} },
 	{ MODKEY,                       XK_Right,  setmfact,       {.f = +0.01} },
-	{ MODKEY,                       XK_Up,     spawn,          SHCMD("set-brightness.sh +200") },
-	{ MODKEY,                       XK_Down,   spawn,          SHCMD("set-brightness.sh -200") },
 	{ MODKEY,                       XK_l,      toggletaglock,  {0} },
 	{ MODKEY|ShiftMask,             XK_l,      taglockall,     {0} },
 	{ MODKEY|ControlMask,           XK_l,      spawn,          SHCMD("xautolock -locknow") },
@@ -103,9 +106,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7),
 	TAGKEYS(                        XK_s,                      8),
 
-	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB-")},
-	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB+")},
-	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master toggle")},
+	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB-") },
+	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB+") },
+	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master toggle") },
+	{ 0,         XK_XF86MonBrightnessUp,       spawn,          SHCMD("set-brightness.sh +200") },
+	{ 0,         XK_XF86MonBrightnessDown,     spawn,          SHCMD("set-brightness.sh -200") },
 
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
