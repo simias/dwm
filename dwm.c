@@ -2241,13 +2241,18 @@ viewall(const Arg *arg)
 		if (arg->ui & TAGMASK)
 			m->tagset[m->seltags] = arg->ui & TAGMASK;
 
+		unfocus(selmon->sel, 0);
 		selmon = m;
 		focus(NULL);
-		arrange(m);
 	}
 
+	unfocus(selmon->sel, 0);
 	selmon = sm;
 	focus(NULL);
+
+	for (m = mons; m; m = m->next) {
+                arrange(m);
+	}
 }
 
 Client *
