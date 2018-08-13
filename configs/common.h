@@ -66,7 +66,6 @@ static const char *termcmd[]  = { "st", NULL };
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_u,      spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      banishpointer,  {0} },
 	{ MODKEY,                       XK_h,      togglebar,      {0} },
 	{ MODKEY,                       XK_n,      focusstack,     {.i = +1 } },
@@ -94,6 +93,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_e,      focusbyclass,   {.s = "Emacs" } },
 	{ MODKEY,                       XK_w,      focusbyclass,   {.s = "Firefox" } },
 	{ MODKEY,                       XK_c,      focusbyclass,   {.s = "mainterm" } },
+	{ MODKEY|ShiftMask,             XK_c,      spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_a,      tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_o,      tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0),
