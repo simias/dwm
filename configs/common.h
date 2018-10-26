@@ -106,9 +106,9 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7),
 	TAGKEYS(                        XK_s,                      8),
 
-	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB-") },
-	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("amixer -c 0 -- sset Master playback 2dB+") },
-	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("amixer set Master toggle") },
+	{ 0,         XK_XF86AudioLowerVolume,      spawn,          SHCMD("volctrl.sh lower") },
+	{ 0,         XK_XF86AudioRaiseVolume,      spawn,          SHCMD("volctrl.sh raise") },
+	{ 0,         XK_XF86AudioMute,             spawn,          SHCMD("volctrl.sh togglemute") },
 	{ 0,         XK_XF86MonBrightnessUp,       spawn,          SHCMD("set-brightness.sh +200") },
 	{ 0,         XK_XF86MonBrightnessDown,     spawn,          SHCMD("set-brightness.sh -200") },
 
