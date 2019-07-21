@@ -6,7 +6,9 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class                   instance    title       tags mask  isfloating   monitor */
+	{ "Navigator",             NULL,       NULL,       1 << 7,    0,           0 },
 	{ "Firefox",               NULL,       NULL,       1 << 7,    0,           0 },
+	{ "firefox",               NULL,       NULL,       1 << 7,    0,           0 },
 	{ "mainterm",              NULL,       NULL,       1 << 6,    0,           1 },
 	{ "Emacs",                 NULL,       NULL,       1 << 6,    0,           0 },
 	{ "SpiderOakONE",          NULL,       NULL,       1 << 4,    0,          -1 },
