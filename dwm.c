@@ -274,7 +274,6 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
-static Client *lastclientfound = NULL;
 
 /* configuration, allows nested code to access above variables */
 /* Create a symbolic link to one of the configs/config-* */
@@ -810,36 +809,38 @@ expose(XEvent *e)
 Client *
 findclientbyclass(const char *class) {
 	Client *c;
-	Client *first_found = NULL;
-	Monitor *m;
-	int found_last_client = (lastclientfound == NULL);
+        Client *first_found = NULL;
+        Client *return_after = NULL;
+        Monitor *m;
 
-	/* Attempt to find a client whose class contains "class". If
-	   "lastclientfound" is not NULL and multiple matches are found returns
-	   the one following "lastclientfound" (to rotate between matches
-	   between each invocation) */
-	for (m = mons; m; m = m->next) {
-		for (c = m->clients; c; c = c->next) {
-			if (c->class && strstr(class, c->class)) {
-				if (found_last_client) {
-					lastclientfound = c;
-					return c;
-				}
+        if (selmon->sel && strstr(class, selmon->sel->class)) {
+                // The currently focused window has the right class, we want to
+                // return the one that comes after it
+                return_after = selmon->sel;
+        }
 
-				if (c == lastclientfound) {
-					found_last_client = 1;
-				}
 
-				if (first_found == NULL) {
-					first_found = c;
-				}
-			}
-		}
-	}
+        for (m = mons; m; m = m->next) {
+                for (c = m->clients; c; c = c->next) {
+                        if (c->class && strstr(class, c->class)) {
+                                if (first_found == NULL) {
+                                        first_found = c;
+                                }
 
-	lastclientfound = first_found;
+                                if (return_after == NULL) {
+                                        return c;
+                                }
 
-	return first_found;
+                                if (c == return_after) {
+                                        return_after = NULL;
+                                }
+                        }
+                }
+        }
+
+        // If we reached this point it means that we either didn't find anything
+        // or that there was no more matching window after selmon->sel
+        return first_found;
 }
 
 void
@@ -1125,10 +1126,6 @@ keypress(XEvent *e)
 		if (keysym == keys[i].keysym
 		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
 		&& keys[i].func) {
-			if (keys[i].func != focusbyclass) {
-				/* Reset focusbyclass selection sequence */
-				lastclientfound = NULL;
-			}
 			keys[i].func(&(keys[i].arg));
 		}
 }
@@ -1967,9 +1964,6 @@ unmanage(Client *c, int destroyed)
 		XSync(dpy, False);
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
-	}
-	if (c == lastclientfound) {
-		lastclientfound = NULL;
 	}
 	free(c->class);
 	free(c);
