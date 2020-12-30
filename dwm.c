@@ -819,7 +819,6 @@ findclientbyclass(const char *class) {
                 return_after = selmon->sel;
         }
 
-
         for (m = mons; m; m = m->next) {
                 for (c = m->clients; c; c = c->next) {
                         if (c->class && strstr(class, c->class)) {
@@ -878,11 +877,6 @@ focusbyclass(const Arg *arg) {
 	}
 
 	c = findclientbyclass(arg->s);
-	/* If the current focused window matches attempt to find an other one */
-	if (c && c == sel) {
-		c = findclientbyclass(arg->s);
-	}
-
 	if (c == NULL || c == sel) {
 		return;
 	}
@@ -896,7 +890,7 @@ focusbyclass(const Arg *arg) {
 		tag = 1 << (ffs(tag) - 1);
 
 		a.ui = tag;
-		viewall(&a);
+		view(&a);
 	}
 
 	if (ISVISIBLE(c)) {
