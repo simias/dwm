@@ -881,6 +881,12 @@ focusbyclass(const Arg *arg) {
 		return;
 	}
 
+        if (c->mon != selmon) {
+            unfocus(selmon->sel, 0);
+            selmon = c->mon;
+            focus(NULL);
+        }
+
 	if (!ISVISIBLE(c) && c->tags) {
 		/* Find the first tag containing the client and switch to
 		   that */
