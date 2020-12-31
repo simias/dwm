@@ -9,13 +9,13 @@ static const Rule rules[] = {
 	{ "Navigator",             NULL,       NULL,       1 << 7,    0,           0 },
 	{ "Firefox",               NULL,       NULL,       1 << 7,    0,           0 },
 	{ "firefox",               NULL,       NULL,       1 << 7,    0,           0 },
-	{ "mainterm",              NULL,       NULL,       1 << 6,    0,           1 },
-	{ "Emacs",                 NULL,       NULL,       1 << 6,    0,           0 },
-	{ "gvim",                  NULL,       NULL,       1 << 6,    0,           0 },
-	{ "Gvim",                  NULL,       NULL,       1 << 6,    0,           0 },
+	{ "mainterm",              NULL,       NULL,       1 << 6,    0,           0 },
+	{ "Emacs",                 NULL,       NULL,       1 << 6,    0,           1 },
+	{ "gvim",                  NULL,       NULL,       1 << 6,    0,           1 },
+	{ "Gvim",                  NULL,       NULL,       1 << 6,    0,           1 },
 	{ "SpiderOakONE",          NULL,       NULL,       1 << 4,    0,          -1 },
-	{ "VirtualBox Machine",    NULL,       NULL,       1 << 1,    0,           1 },
-	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           2 },
+	{ "VirtualBox Machine",    NULL,       NULL,       1 << 1,    0,           0 },
+	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           0 },
 };
 
 #include "configs/common.h"
