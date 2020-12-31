@@ -720,7 +720,9 @@ drawbar(Monitor *m)
 	unsigned int i, occ = 0, urg = 0;
 	int has_sticky = 0;
 	Client *c;
+#if 0
 	Monitor *mn;
+#endif
 
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
@@ -736,6 +738,7 @@ drawbar(Monitor *m)
 		has_sticky |= c->issticky;
 	}
 
+#if 0
 	/* Display window presence for the given tag even if the window is on an
 	   other monitor */
 	for (mn = mons; mn; mn = mn->next) {
@@ -743,6 +746,7 @@ drawbar(Monitor *m)
 			occ |= c->tags;
 		}
 	}
+#endif
 
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
