@@ -16,6 +16,13 @@ static const Rule rules[] = {
 	{ "SpiderOakONE",          NULL,       NULL,       1 << 4,    0,           0 },
 	{ "VirtualBox Machine",    NULL,       NULL,       1 << 1,    0,           0 },
 	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           0 },
+	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           0 },
+	{ "Telegram",              NULL,       NULL,       1 << 8,    0,           0 },
+	{ "Signal",                NULL,       NULL,       1 << 8,    0,           0 },
+	{ "Spotify",               NULL,       NULL,       1 << 8,    0,           0 },
+
+        // Catch-all
+	{ NULL,                    NULL,       NULL,       1 << 0,    0,           0 },
 };
 
 #include "configs/common.h"
