@@ -237,6 +237,7 @@ static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
 static void viewall(const Arg *arg);
+static void viewmon0(const Arg *arg);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
@@ -2241,6 +2242,16 @@ view(const Arg *arg)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
 	focus(NULL);
 	arrange(selmon);
+}
+
+/* Like view, but always switches to mon 0 first */
+void
+viewmon0(const Arg *arg)
+{
+        Arg mon_arg = { .ui = 0 };
+        focusmonabs(&mon_arg);
+
+        view(arg);
 }
 
 inline void
