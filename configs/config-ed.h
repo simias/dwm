@@ -20,9 +20,6 @@ static const Rule rules[] = {
 	{ "Telegram",              NULL,       NULL,       1 << 8,    0,           0 },
 	{ "Signal",                NULL,       NULL,       1 << 8,    0,           0 },
 	{ "Spotify",               NULL,       NULL,       1 << 8,    0,           0 },
-
-        // Catch-all
-	{ NULL,                    NULL,       NULL,       1 << 0,    0,           0 },
 };
 
 #include "configs/common.h"
