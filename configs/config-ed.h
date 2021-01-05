@@ -14,6 +14,8 @@ static const Rule rules[] = {
 	{ "gvim",                  NULL,       NULL,       1 << 0,    0,           1 },
 	{ "Gvim",                  NULL,       NULL,       1 << 0,    0,           1 },
 	{ "SpiderOakONE",          NULL,       NULL,       1 << 4,    0,           0 },
+	{ "ProtonMail",            NULL,       NULL,       1 << 4,    0,           0 },
+	{ "Thunderbird",           NULL,       NULL,       1 << 5,    0,           0 },
 	{ "VirtualBox Machine",    NULL,       NULL,       1 << 1,    0,           0 },
 	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           0 },
 	{ "VirtualBox Manager",    NULL,       NULL,       1 << 1,    0,           0 },
