@@ -59,7 +59,7 @@ static const char *dmenucmd[] = { "dmenu_run",
 				  "-sf", col_gray4,
 				  NULL };
 
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 
 #ifndef XK_XF86AudioLowerVolume
 # define XK_XF86AudioLowerVolume    0x1008ff11
