@@ -829,7 +829,7 @@ findclientbyclass(const char *class) {
         Client *return_after = NULL;
         Monitor *m;
 
-        if (selmon->sel && strstr(class, selmon->sel->class)) {
+        if (selmon->sel && selmon->sel->class && strstr(class, selmon->sel->class)) {
                 // The currently focused window has the right class, we want to
                 // return the one that comes after it
                 return_after = selmon->sel;
