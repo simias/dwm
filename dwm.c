@@ -1320,6 +1320,7 @@ movemouse(const Arg *arg)
 	XUngrabPointer(dpy, CurrentTime);
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
 		sendmon(c, m);
+		unfocus(selmon->sel, 1);
 		selmon = m;
 		focus(NULL);
 	}
